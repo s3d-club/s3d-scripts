@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+n=1; p="$1"; inst="$p"; [ -n "$p" ] || err="\$$n <instance-id> is required"
+
+[ -z "$err" ] || { 
+  { 
+    echo -e "ERR..: $err"
+    echo -e "USE..: $(echo "$0" | sed 's/.*\///') <instance-id>"
+    echo -e "ABOUT: Gets the EC2 instance's \"Name\" tag."
+  } >&2
+  exit 1
+}
+
+# get running instances
+aws ec2 describe-instances | jq -r '
+.Reservations[].Instances[]
+| select(.InstanceId == "'"$inst"'") 
+| .Tags[]
+| select(.Key == "Name")
+| .Value
+'

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+s3d-git-list-version-tags | sed -e 's/^v/s3d-git-push-bare-v-tag /' | sh

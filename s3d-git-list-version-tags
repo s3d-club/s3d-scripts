@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+# show tags with grep used to view only version tags and sort the result.
+git tag | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | sort -V

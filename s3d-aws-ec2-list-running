@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+# get running instances
+ri=$(
+  aws ec2 describe-instances | jq -r '
+  .Reservations[].Instances[]
+  | select(.State.Name == "running") 
+  | .InstanceId
+  '
+)
+
+for ri in $ri
+do
+  s3d-aws-ec2-get-name-tag "$ri"
+done

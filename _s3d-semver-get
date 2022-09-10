@@ -1,0 +1,6 @@
+#!/bin/bash
+
+latest=$(grep -E '^## \[[0-9]' < CHANGES.md | tail -n 1 | sed 's/.*\[//' | sed 's/\].*//')
+penultimate=$(grep -E '^## \[[0-9]' < CHANGES.md | grep -v -F "$latest" | tail -n 1 | sed 's/.*\[//' | sed 's/\].*//')
+
+echo -e "{\"latest\": \"$latest\", \"penultimate\": \"$penultimate\"}"

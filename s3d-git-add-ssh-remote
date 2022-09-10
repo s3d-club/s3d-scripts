@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Exit with error if the origin is not on GitHub
+if [[ ! $(git remote get-url origin) =~ .*\/github\.com\/.* ]]; then
+  echo "ERROR, this only works for GitHub" >&2
+  exit 1
+fi
+
+if [ -n "$(git remote get-url ssh)" ]; then
+  echo "INFO: A remote already existed" >&2
+  exit 0
+fi
+
+echo -e "INFO: Adding new \"ssh\" remote" >&2
+git remote add ssh "$(git remote get-url origin \
+  | sed 's/.*github\.com\//git@github\.com\:/')"

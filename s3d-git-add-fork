@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Exit with error if the origin is not on GitHub
+if [[ ! $(git remote get-url origin) =~ .*\/github\.com\/.* ]]; then
+  echo "ERROR, this only works for GitHub" >&2
+  exit 1
+fi
+
+if [[ ! $(git remote get-url origin) =~ .*\/s3d-club/.* ]]; then
+  echo "ERROR, this only works for \"s3d-club\" origin" >&2
+  exit 1
+fi
+
+if [ -z "$S3D_GITHUB_USER" ]; then
+  echo "ERROR, this only works if you have S3D_GITHUB_USER defined" >&2
+  exit 1
+fi
+
+if [ -n "$(git remote get-url fork)" ]; then
+  echo "INFO: A remote already existed" >&2
+  exit 0
+fi
+
+echo -e "INFO: Adding new fork remote" >&2
+git remote add fork "$(git remote get-url origin \
+  | sed 's/.*github\.com\//git@github\.com\:/' \
+	| sed "s/s3d-club\//$S3D_GITHUB_USER\/s3d-club--/")"
