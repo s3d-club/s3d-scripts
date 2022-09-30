@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+S3D_FLOW_MSG=${S3D_FLOW_MSG:-Changed}
+
+v=$(s3d-flow-json | jq -r '.latest')
+v_=$(echo $v | sed 's/\./\\\./')
+block=$(sed -e '/## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/$v_/,\$p" | sort)
+block=$(echo "$block" | grep -v -E '^##')
+done=$(echo "$block"  | grep -E '^-' | grep -v -E '^- \*\*TODO\*\*' | wc -l)
+items=$(echo "$block" | grep -E '^-' | wc -l)
+
+if [[ $done == $items ]]; then
+	commit=$"$v $S3D_FLOW_MSG"
+else
+	commit=$"$v $S3D_FLOW_MSG; $done of $items completed"
+fi
+
+commit="$commit"$'\n\n';
+commit="$commit$block"
+
+if [[ $done -gt $items ]]; then
+  echo "ERROR: nonsense count!"
+  echo "items=$items"
+  echo "done=$done"
+  echo "$block" | nl
+  exit 1
+fi
+
+git add -A
+git commit -m "$commit"

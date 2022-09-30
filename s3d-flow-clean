@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+# First make certain that all tags have been pushed to the fork
+git tag -d s3d-reset || true
+git push fork --tags
+
+# Remove anything that looks like a pre-release tag
+git tag \
+| grep -E '^[0-9]+\.[0-9]+\.[0-9]+-.*$' \
+| sed 's/^/s3d-flow-tag-rm /' \
+| sh

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+# Exit if this is the scripts dir
+[[ scripts != ${PWD##*/} ]] || exit 0
+
+[ ! -f ./s3d-push ] || ./s3d-push

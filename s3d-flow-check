@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+v=$(s3d-flow-json | jq -r '.latest')
+v_=$(echo $v | sed 's/\./\\\./')
+block=$(sed -e '/^## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/\[$v_/,\$p")
+block=$(echo "$block" | grep -v -E '^##')
+done=$(echo "$block" | grep -v -E '^- \*\*TODO\*\*' | wc -l)
+items=$(echo "$block" | grep -E '^-' | wc -l)
+
+if [[ $done != $items ]]; then
+  echo "ERROR: not all items are done!" >&2
+  echo "$block"
+  exit 1
+fi
+
+if [ -f main.tf ]; then
+  pre_release_count=$(grep -E ' +source .*\?ref=.*-' main.tf | wc -l)
+  if [[ $pre_release_count != 0 ]]; then
+    echo "ERROR: $pre_release_count pre-release sources" >&2
+    grep -E ' +source .*\?ref=.*-' main.tf
+    exit 1
+  fi
+fi

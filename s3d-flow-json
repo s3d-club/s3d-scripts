@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+
+latest=$(
+  grep -E '^## \[[0-9]' < CHANGES.md \
+  | tail -n 1 \
+  | sed 's/.*\[//' \
+  | sed 's/\].*//'
+)
+
+penultimate=$(
+  grep -E '^## \[[0-9]' < CHANGES.md \
+  | grep -v -F "$latest" \
+  | tail -n 1 \
+  | sed 's/.*\[//' \
+  | sed 's/\].*//'
+)
+
+is_final=$(echo "$latest" | sed 's/.*-//')
+
+if [[ "$is_final" == "$latest" ]]; then
+  is_final=true
+else
+  is_final=false
+fi
+
+part=${PWD##*/}
+release=$(echo $latest | sed 's/-.*//')
+json=""
+json="$json{"
+json="$json  \"is_final\": \"$is_final\","
+json="$json  \"latest\": \"$latest\","
+json="$json  \"part\": \"$part\","
+json="$json  \"penultimate\": \"$penultimate\","
+json="$json  \"release\": \"$release\""
+json="$json}"
+echo -e "$json"

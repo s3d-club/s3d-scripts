@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+s3d-flow-reset
+s3d-flow "$1"

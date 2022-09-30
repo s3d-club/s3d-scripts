@@ -1,0 +1,47 @@
+#!/bin/bash
+set -e
+
+# Exit if this is the scripts dir
+[[ scripts != ${PWD##*/} ]] || exit 0
+
+echo 'FLOW: format'
+s3d-format
+
+# If a local init script exists we run it
+if [ -f ./s3d-init ]; then
+  has_local_init=true
+  echo 'FLOW: local init'
+  ./s3d-init
+fi
+
+# If main.tf exits, we also init by running terrafom validate
+if [ -f main.tf ]; then
+  log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+  { {
+    if [ -n "$S3D_TF_LOCK" ]; then
+  		echo 'FLOW: tf lock update and init'
+      s3d-tf-lock
+    fi
+  	echo 'FLOW: tf get, update, and init'
+    terraform get -update
+    terraform init
+  } > $log 2>&1; } || {
+    cat $log >&2
+    exit -1
+  }
+fi
+
+# If main.go, we run go tidy
+if [ -f main.go ]; then
+  echo 'FLOW: go mod tidy'
+  go mod tidy
+fi
+
+# If a package.json exists, we run npm **UNLESS** a local `s3d-init` script
+# exists.
+if [ -z $has_local_init ]; then
+  if [ -f package.json ]; then
+    echo 'FLOW: npm install'
+    npm install
+  fi
+fi

@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+latest=$(s3d-flow-json | jq -r .latest)
+if [[ $latest != $(echo $latest | sed 's/-.*//') ]]; then
+  echo "FLOW: $latest already started"
+  exit 0
+fi
+
+v=$latest
+v_minor=$(echo $v | sed 's/.*\.//')
+v_minor=$(( v_minor + 1 ))
+v=$(echo $v | sed 's/\.[^\.]*$//')
+v="## [$v.$v_minor-1000](.)"
+
+{
+  echo ""
+  echo "$v" 
+  echo "- **TODO** Planned item" 
+} >> CHANGES.md

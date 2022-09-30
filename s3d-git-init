@@ -5,8 +5,8 @@ set -e
 n=2; p="$2"; email="$p"; [ -n "$p" ] || err="\$$n (email) is required"
 n=1; p="$1"; name="$p";  [ -n "$p" ] || err="\$$n (name) is required"
 
-[ -z "$err" ] || { 
-  { 
+[ -z "$err" ] || {
+  {
     echo -e "ERR..: $err"
     echo -e "USE..: $(echo "$0" | sed 's/.*\///') <name> <email>"
     echo -e "ABOUT: Configures the Git user and create a GPG key."
@@ -21,7 +21,7 @@ Key-Type: 1
 Expire-Date: 0
 Key-Length: 2048
 Name-Email: $email
-Name-Real: $name 
+Name-Real: $name
 Subkey-Length: 2048
 Subkey-Type: 1
 EOF
@@ -41,7 +41,7 @@ git config --global user.name "$name"
 git config --global commit.gpgsign true
 git config --global user.signingkey "$key"
 
-gpg --armor --export "$key" 
+gpg --armor --export "$key"
 echo
 
 cat ~/.ssh/id_rsa.pub

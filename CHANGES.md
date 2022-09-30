@@ -1,9 +1,8 @@
 # Changes
-- This is a [CHANGES.md](https://go.s3d.club/changes/) file
+Recently completed and planned work is tracked here.
 
-## [0.0.1](https://go.s3d.club/s3d-scripts/work/0.0.1)
-- Added initial implementation
+## [0.0.0](.) [0.0.16](.)
+- Created early versions
 
-## [Next](https://go.s3d.club/s3d-scripts/next)
-- **TODO** Added CI/CD
-- **TODO** Improved `README.md`
+## [0.1.0](.)
+- Completed 1st release

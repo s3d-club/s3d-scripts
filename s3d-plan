@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+# Exit if this is the scripts dir
+[[ scripts != ${PWD##*/} ]] || exit 0
+
+s3d-init
+
+[ ! -f ./s3d-test ] || ./s3d-test
+
+if [ -f main.tf ]; then
+  terraform plan
+fi

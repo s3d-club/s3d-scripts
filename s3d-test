@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+echo 'FLOW: test v1'
+
+# Exit if this is the scripts dir
+if [[ scripts == ${PWD##*/} ]]; then
+  exit 0
+fi
+
+# Perform init
+s3d-init
+
+# If a local test script exists run it
+if [ -f ./s3d-test ]; then
+  ./s3d-test
+fi
+
+# If main.tf exits we also test by running terrafom validate
+if [ -f main.tf ]; then
+  valid=$(terraform validate -json | jq -r .valid)
+  if [[ $valid != true ]]; then
+    terraform validate -json | jq
+    terraform validate
+    exit 1
+  fi
+fi
