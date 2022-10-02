@@ -7,7 +7,7 @@ if [ -n "$2" ]; then
 fi
 
 # determine the module
-module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
+module=$(s3d-flow-json | jq -r .module)
 export S3D_MODULE=$module
 
 echo -e $'\n'
@@ -58,10 +58,5 @@ fi
 # Push the flow to update "ref=" in other modules
 s3d-flow-push
 
-# Execute a module post flow if one exists
-if [ -f "../scripts/post-flow/$module" ]; then
-  echo "FLOW: starting postflow '$module'" 
-  "../scripts/post-flow/$module" "$1"
-else
-  echo "FLOW: no postflow for '$module'" 
-fi
+# Run the post flow
+s3d-flow-post-flow

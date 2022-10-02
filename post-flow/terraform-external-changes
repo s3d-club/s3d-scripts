@@ -2,3 +2,4 @@
 set -e
 
 s3d-flow "$1" 02-name
+s3d-flow "$1" 03-acm

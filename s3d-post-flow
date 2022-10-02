@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-
-if [ -e ./s3d-post-flow ]; then
-  ./s3d-post-flow
-fi

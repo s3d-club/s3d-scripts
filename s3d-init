@@ -19,12 +19,21 @@ if [ -f main.tf ]; then
   log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
   { {
     if [ -n "$S3D_TF_LOCK" ]; then
-  		echo 'FLOW: tf lock update and init'
+      echo 'FLOW: tf lock update'
       s3d-tf-lock
     fi
-  	echo 'FLOW: tf get, update, and init'
+    echo 'FLOW: tf get -update'
     terraform get -update
-    terraform init
+
+    echo 'FLOW: tf init'
+    if [ terraform init ]; then
+      echo 'FLOW: tf init - complete'
+    else
+      echo 'FLOW: WARN tf init failed, will try again in 1 minute'
+      sleep 60
+      terraform init
+      echo 'FLOW: tf init - 2nd try complete'
+    fi
   } > $log 2>&1; } || {
     cat $log >&2
     exit -1

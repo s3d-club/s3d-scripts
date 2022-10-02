@@ -2,6 +2,7 @@
 set -e
 
 s3d-flow "$1" 03-acm
+s3d-flow "$1" 03-az-vm
 s3d-flow "$1" 03-ecr
 s3d-flow "$1" 03-eg-open
 s3d-flow "$1" 03-ig-open
