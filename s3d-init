@@ -16,12 +16,9 @@ fi
 
 # If main.tf exits, we also init by running terrafom validate
 if [ -f main.tf ]; then
+  echo 'FLOW: tf init'
   log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
   { {
-    if [ -n "$S3D_TF_LOCK" ]; then
-      echo 'FLOW: tf lock update'
-      s3d-tf-lock
-    fi
     echo 'FLOW: tf get -update'
     terraform get -update
 
@@ -38,6 +35,11 @@ if [ -f main.tf ]; then
     cat $log >&2
     exit -1
   }
+
+  if [ -n "$S3D_TF_LOCK" ]; then
+    echo 'FLOW: tf lock update'
+    s3d-tf-lock
+  fi
 fi
 
 # If main.go, we run go tidy
