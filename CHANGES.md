@@ -17,3 +17,7 @@ Recently completed and planned work is tracked here.
 - Changed `s3d-flow` to use `s3d-flow-json`
 - Improved output messages of `s3d-init`
 - Removed obsolete `s3d-post-flow`
+
+## [0.1.3](.)
+- Added a parameter to `s3d-apply`
+- Updated `CONTRIBUTING.md`

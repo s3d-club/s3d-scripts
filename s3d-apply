@@ -28,5 +28,5 @@ if [ -f main.tf ]; then
 fi
 
 if [ -f ./s3d-apply ]; then
-  ./s3d-apply
+  ./s3d-apply "$1"
 fi
