@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ -n "$2" ]; then
+  echo "FLOW: in '$(pwd)' changing to '$2'"
+  cd "../$2"
+fi
+
 # determine the module
 module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
 export S3D_MODULE=$module
@@ -27,7 +32,7 @@ echo "S3D_FLOW_MSG='$S3D_FLOW_MSG'"
 
 # Execute a local flow if one exists
 if [[ scripts != ${PWD##*/} ]]; then
-	echo 'FLOW: local flow'
+  echo 'FLOW: local flow'
   [ ! -f ./s3d-flow ] || ./s3d-flow
 fi
 
@@ -50,7 +55,13 @@ else
   git checkout -q HEAD~0
 fi
 
-# Execute a post flow if one exists
-if [[ scripts != ${PWD##*/} ]]; then
-  [ ! -f ./s3d-post-flow ] || ./s3d-post-flow
+# Push the flow to update "ref=" in other modules
+s3d-flow-push
+
+# Execute a module post flow if one exists
+if [ -f "../scripts/post-flow/$module" ]; then
+  echo "FLOW: starting postflow '$module'" 
+  "../scripts/post-flow/$module" "$1"
+else
+  echo "FLOW: no postflow for '$module'" 
 fi

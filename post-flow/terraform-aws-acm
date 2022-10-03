@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+s3d-flow "$1" 05-site

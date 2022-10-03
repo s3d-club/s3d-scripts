@@ -24,13 +24,16 @@ else
   is_final=false
 fi
 
+module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
+module=${module:-$(git remote get-url origin | sed 's/.*\///' | sed 's/\.git//')}
+
 part=${PWD##*/}
 release=$(echo $latest | sed 's/-.*//')
 json=""
 json="$json{"
 json="$json  \"is_final\": \"$is_final\","
 json="$json  \"latest\": \"$latest\","
-json="$json  \"part\": \"$part\","
+json="$json  \"module\": \"$module\","
 json="$json  \"penultimate\": \"$penultimate\","
 json="$json  \"release\": \"$release\""
 json="$json}"

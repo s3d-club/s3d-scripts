@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+m=$(s3d-flow-json | jq -r .module)
+v=$(git describe)
+
+echo "FLOW: pushing '$v' for '$m'"
+
+cd ..
+sed -i "s/$m?ref=.*\"/$m?ref=$v\"/" $(
+	find . -name \*.tf -not -path '*/.terraform/*'
+)

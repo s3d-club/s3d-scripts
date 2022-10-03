@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+# Get current key and secret
+key=$(aws configure get aws_access_key_id)
+secret=$(aws configure get aws_secret_access_key)
+
+# Create new key and secret (10 seconds for aws async)
+new=$(aws iam create-access-key | jq .AccessKey)
+sleep 10
+
+# Store new key and secret
+old_key=$key
+key=$(echo $new | jq -r .AccessKeyId)
+secret=$(echo $new | jq -r .SecretAccessKey)
+aws configure set aws_access_key_id "$key"
+aws configure set aws_secret_access_key "$secret"
+
+# Deactivate old key
+aws iam delete-access-key --access-key-id "$old_key"
