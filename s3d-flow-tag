@@ -2,6 +2,7 @@
 set -e
 
 # Loop until we are able to tag and push
+m=$(s3d-flow-json | jq -r .module)
 v=$(s3d-flow-json | jq -r .latest)
 v_=$(echo $v | sed 's/\./\\\./')
 n=0
@@ -38,7 +39,7 @@ while [[ $n != 10 ]]; do
   # Increment the pre-release number
   pre=$(echo $v | sed 's/.*-//')
   if [[ $pre == $v ]]; then
-    echo "FLOW: FLOW IS NOT STARTED!"
+    echo "FLOW: FLOW FOR '$m' IS NOT STARTED!"
     exit 1
   fi
 

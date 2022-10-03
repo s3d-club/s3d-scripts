@@ -21,3 +21,6 @@ Recently completed and planned work is tracked here.
 ## [0.1.3](.)
 - Added a parameter to `s3d-apply`
 - Updated `CONTRIBUTING.md`
+
+## [0.1.4](.)
+- Improved output of `s3d-flow-tag`
