@@ -5,6 +5,13 @@ echo 'FLOW: test v1'
 
 # Exit if this is the scripts dir
 if [[ scripts == ${PWD##*/} ]]; then
+  echo "S3D TEST: disabled (in scripts dir)"
+  exit 0
+fi
+
+# Exit if ../s3d-disable/tests exists
+if [ -d ../s3d-disable-tests ]; then
+  echo "S3D TEST: disabled"
   exit 0
 fi
 
@@ -24,4 +31,7 @@ if [ -f main.tf ]; then
     terraform validate
     exit 1
   fi
+
+  # Also run tfsec
+  tfsec .
 fi

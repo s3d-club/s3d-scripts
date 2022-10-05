@@ -31,7 +31,7 @@ while [[ $n != 10 ]]; do
   else
     echo "FLOW: tagging as pre-release"
     git tag -s -m 'pre-release' "$v" && git push ssh $v && exit 0
-  fi	
+  fi
 
   # Delete the tag that we were not able to push
   git tag -d "$v" > /dev/null 2>&1 || true
@@ -54,6 +54,18 @@ while [[ $n != 10 ]]; do
   if [[ $pre -lt 1000 ]]; then
     pre=1000
   fi
+
+  # Find or create a group code for the pre-release number
+  if [ -z "$S3D_GROUP" ]; then
+    if [ -f '../.dev-group' ]; then
+      S3D_GROUP="$(cat ../.dev-group)"
+    else
+      S3D_GROUP="$(whoami)"
+    fi
+  fi
+
+  # Add the group code
+  pre="$S3D_GROUP-$pre"
 
   # Use sed to update CHANGES.md for an incremented pre-release number
   v2="$(echo $v | sed 's/-.*//')-$pre"

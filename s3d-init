@@ -16,29 +16,27 @@ fi
 
 # If main.tf exits, we also init by running terrafom validate
 if [ -f main.tf ]; then
+  echo 'FLOW: tf get -update'
+  log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+  terraform get -update >> $log 2>&1 
+
   echo 'FLOW: tf init'
   log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
-  { {
-    echo 'FLOW: tf get -update'
-    terraform get -update
-
-    echo 'FLOW: tf init'
-    if [ terraform init ]; then
-      echo 'FLOW: tf init - complete'
-    else
-      echo 'FLOW: WARN tf init failed, will try again in 1 minute'
-      sleep 60
-      terraform init
-      echo 'FLOW: tf init - 2nd try complete'
-    fi
-  } > $log 2>&1; } || {
-    cat $log >&2
-    exit -1
-  }
+  if [ s3d-terraform-init ]; then
+    echo 'FLOW: tf init - complete'
+  else
+    try_delay=10
+    echo "FLOW: WARN tf init failed, will try again in $try_delay seconds"
+    sleep $try_delay
+    log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+    s3d-terraform-init
+    echo 'FLOW: tf init - 2nd try complete'
+  fi
 
   if [ -n "$S3D_TF_LOCK" ]; then
     echo 'FLOW: tf lock update'
-    s3d-tf-lock
+    log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+    s3d-tf-lock >> $log 2>&1
   fi
 fi
 
