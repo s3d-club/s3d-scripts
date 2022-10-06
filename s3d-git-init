@@ -1,37 +1,49 @@
 #!/bin/bash
+
 set -e
 
-# Get name and email
 n=2; p="$2"; email="$p"; [ -n "$p" ] || err="\$$n (email) is required"
 n=1; p="$1"; name="$p";  [ -n "$p" ] || err="\$$n (name) is required"
 
-# Show error if param is missing
-if [ -n "$err" ]; then
+[ -z "$err" ] || {
   {
-    echo -e "AI-GIT-INIT: v1"
     echo -e "ERR..: $err"
     echo -e "USE..: $(echo "$0" | sed 's/.*\///') <name> <email>"
     echo -e "ABOUT: Configures the Git user and create a GPG key."
   } >&2
   exit 1
-fi
+}
 
-# Create the key if it does not exist
-gpg --batch --passphrase '' --quick-gen-key "$name <$email>" || true
-key="$(gpg -k | grep -B 1 -F "$email" | head -n 1 | sed -e 's/.*\///' -e 's/ .*//')"
+key=$(
+{
+gpg --batch --gen-key <<EOF
+Key-Type: 1
+Expire-Date: 0
+Key-Length: 2048
+Name-Email: $email
+Name-Real: $name
+Subkey-Length: 2048
+Subkey-Type: 1
+EOF
+} 2>&1 | cat
+)
 
-# Configure git
+key=$(
+echo "$key" \
+| tail -n 1 \
+| tr ' ' '\n' \
+| head -n 3 \
+| tail -n 1
+)
+
 git config --global user.email "$email"
 git config --global user.name "$name"
 git config --global commit.gpgsign true
 git config --global user.signingkey "$key"
 
-# Show GPG key
-echo "YOUR GPG KEY IS '$key':"
 gpg --armor --export "$key"
 echo
 
-# Show SSH key
-echo "YOUR SSH KEY:"
-cat "$HOME/.ssh/id_rsa.pub"
+cat ~/.ssh/id_rsa.pub
 echo
+

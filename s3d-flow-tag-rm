@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
-git tag -d "$1"
-git push ssh ":$1"
+git tag -d "$1" || true
+git push ssh ":$1" || true

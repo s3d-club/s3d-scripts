@@ -2,6 +2,5 @@
 set -e
 
 # show tags with grep used to view only version tags and sort the result.
-git tag -f s3d-reset
 git checkout -q HEAD~0
 git reset "$(s3d-git-list-version-tags | grep -E '^v' | tail -n 1)"

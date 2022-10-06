@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+echo -e "{ \"ip\": \"$(curl -s api.ipify.org)\" }" | jq .

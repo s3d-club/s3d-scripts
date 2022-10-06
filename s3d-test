@@ -1,26 +1,38 @@
 #!/bin/bash
 set -e
 
-echo 'FLOW: test v1'
+echo 'FLOW: test'
 
 # Exit if this is the scripts dir
 if [[ scripts == ${PWD##*/} ]]; then
-  echo "S3D TEST: disabled (in scripts dir)"
+  echo 'FLOW: no flow in scripts dir'
   exit 0
 fi
 
-# Exit if ../s3d-disable/tests exists
-if [ -d ../s3d-disable-tests ]; then
-  echo "S3D TEST: disabled"
+# Determine module
+module=$(s3d-flow-json | jq -r .module)
+
+# If a local script exists, then run ONLY it
+if [ -f "$HOME/.s3d/$module/s3d-test" ]; then
+  echo 'FLOW: local s3d-test'
+  "$HOME/.s3d/$module/s3d-test"
+  exit 0
+fi
+
+# If a project script exists, then run ONLY it
+if [ -f ./s3d-test ]; then
+  echo 'FLOW: project s3d-test'
+  ./s3d-test
   exit 0
 fi
 
 # Perform init
 s3d-init
 
-# If a local test script exists run it
+# If a local test script exists run only it
 if [ -f ./s3d-test ]; then
   ./s3d-test
+  exit 0
 fi
 
 # If main.tf exits we also test by running terrafom validate
