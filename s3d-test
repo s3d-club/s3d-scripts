@@ -4,7 +4,7 @@ set -e
 echo 'FLOW: test'
 
 # Exit if this is the scripts dir
-if [[ scripts == ${PWD##*/} ]]; then
+if [[ scripts == "${PWD##*/}" ]]; then
   echo 'FLOW: no flow in scripts dir'
   exit 0
 fi

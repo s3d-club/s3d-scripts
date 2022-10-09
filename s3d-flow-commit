@@ -1,31 +1,43 @@
 #!/bin/bash
+# shellcheck disable=SC2001
 set -e
 
-S3D_FLOW_MSG=${S3D_FLOW_MSG:-Changed}
+# Get the flow message
+if [ -z "$S3D_FLOW_MSG" ]; then
+  S3D_FLOW_MSG="${1:-Changed}"
+fi
 
+# Get versions so we can find the block of lines in `CHANGES.md`
 v=$(s3d-flow-json | jq -r '.latest')
-v_=$(echo $v | sed 's/\./\\\./')
-block=$(sed -e '/## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/$v_/,\$p" | sort)
-block=$(echo "$block" | grep -v -E '^##')
-done=$(echo "$block"  | grep -E '^-' | grep -v -E '^- \*\*TODO\*\*' | wc -l)
-items=$(echo "$block" | grep -E '^-' | wc -l)
+v_=$(echo "$v" | sed 's/\./\\\./')
 
-if [[ $done == $items ]]; then
+# Get the block of lines from `CHANGES.md`
+block=$(sed -e '/## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/$v_/,\$p")
+block=$(echo "$block" | grep -v -E '^##')
+
+# Determine how much is done.
+done=$(echo "$block"  | grep -E '^-' | grep -c -v -E '^- \*\*TODO\*\*' || true)
+items=$(echo "$block" | grep -c -E '^-' || true)
+
+# Construct the commit message subject line
+if [[ $done == "$items" ]]; then
 	commit=$"$v $S3D_FLOW_MSG"
 else
 	commit=$"$v $S3D_FLOW_MSG; $done of $items completed"
 fi
 
+# Process the block of commit message lines 
+echo "$block" | while IFS= read -r line; do
+  if [[ "$line" != "- $S3D_FLOW_MSG" ]]; then
+    str="${str}$line$'\n'"
+  fi
+done
+block="$str"
+
+# Create the full commit message
 commit="$commit"$'\n\n';
 commit="$commit$block"
 
-if [[ $done -gt $items ]]; then
-  echo "ERROR: nonsense count!"
-  echo "items=$items"
-  echo "done=$done"
-  echo "$block" | nl
-  exit 1
-fi
-
+# Issue the commit
 git add -A
 git commit -m "$commit"

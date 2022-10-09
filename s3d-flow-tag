@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2001
 set -e
 
 # Loop until we are able to tag and push
@@ -17,7 +18,7 @@ while [[ $n != 10 ]]; do
   if [ -z "$S3D_ALLOW_REFLOW" ]; then
     echo "FLOW: checking for $v"
     release=$(s3d-flow-json | jq -r .release)
-    if git tag -v $release; then
+    if git tag -v "$release"; then
       echo "ERROR: $release tag already exists!"
       exit 1
     fi
@@ -37,13 +38,13 @@ while [[ $n != 10 ]]; do
   git tag -d "$v" > /dev/null 2>&1 || true
 
   # Increment the pre-release number
-  pre=$(echo $v | sed 's/.*-//')
-  if [[ $pre == $v ]]; then
+  pre=$(echo "$v" | sed 's/.*-//')
+  if [[ $pre == "$v" ]]; then
     echo "FLOW: FLOW FOR '$m' IS NOT STARTED!"
     exit 1
   fi
 
-  pre=$(echo $pre | sed 's/[a-z]/0/g')
+  pre=$(echo "$pre" | sed 's/[a-z]/0/g')
   echo "FLOW: incrementing pre '$pre'"
   if ! pre=$(( pre + 1 )); then
     echo "FLOW: inc failed"
@@ -68,8 +69,8 @@ while [[ $n != 10 ]]; do
   pre="$S3D_GROUP-$pre"
 
   # Use sed to update CHANGES.md for an incremented pre-release number
-  v2="$(echo $v | sed 's/-.*//')-$pre"
-  v2_=$(echo $v2 | sed 's/\./\\\./')
+  v2="$(echo "$v" | sed 's/-.*//')-$pre"
+  v2_=$(echo "$v2" | sed 's/\./\\\./')
   sed -i -e 's/\['"$v_"'\]/\['"$v2_"'\]/' CHANGES.md
   { git reset HEAD^ && s3d-flow-commit; } > /dev/null
   v=$v2

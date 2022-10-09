@@ -1,20 +1,22 @@
 #!/bin/bash
+# shellcheck disable=SC2001
 set -e
 
 latest=$(s3d-flow-json | jq -r .latest)
-if [[ $latest != $(echo $latest | sed 's/-.*//') ]]; then
+if [[ $latest != $(echo -n "$latest" | sed 's/-.*//') ]]; then
   echo "FLOW: $latest already started"
   exit 0
 fi
 
 v=$latest
-v_minor=$(echo $v | sed 's/.*\.//')
+v_minor=$(echo "$v" | sed 's/.*\.//')
 v_minor=$(( v_minor + 1 ))
-v=$(echo $v | sed 's/\.[^\.]*$//')
+v=$(echo "$v" | sed 's/\.[^\.]*$//')
 v="## [$v.$v_minor-1000](.)"
 
+item="${1:-**TODO** Planned item}"
 {
   echo ""
-  echo "$v" 
-  echo "- **TODO** Planned item" 
+  echo "$v"
+  echo "- $item"
 } >> CHANGES.md

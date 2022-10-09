@@ -1,21 +1,25 @@
 #!/bin/bash
+# shellcheck disable=SC2001
 set -e
 
 v=$(s3d-flow-json | jq -r '.latest')
-v_=$(echo $v | sed 's/\./\\\./')
+v_=$(echo "$v" | sed 's/\./\\\./')
 block=$(sed -e '/^## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/\[$v_/,\$p")
 block=$(echo "$block" | grep -v -E '^##')
-done=$(echo "$block" | grep -v -E '^- \*\*TODO\*\*' | wc -l)
-items=$(echo "$block" | grep -E '^-' | wc -l)
+done=$(echo "$block" | grep -c -v -E '^- \*\*TODO\*\*')
+items=$(echo "$block" | grep -c -E '^-')
 
-if [[ $done != $items ]]; then
+if [[ $done != "$items" ]]; then
   echo "ERROR: not all items are done!" >&2
   echo "$block"
   exit 1
 fi
 
 if [ -f main.tf ]; then
-  pre_release_count=$(grep -E ' +source .*\?ref=.*-' main.tf | grep -v F 'forks' | wc -l)
+  pre_release_count=$(
+    grep -c -E ' +source .*\?ref=.*-' main.tf || true
+  )
+
   if [[ $pre_release_count != 0 ]]; then
     echo "ERROR: $pre_release_count pre-release sources" >&2
     grep -E ' +source .*\?ref=.*-' main.tf

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 rm -rf .terraform*
@@ -9,8 +8,6 @@ terraform init
 set +e
 tflock() { terraform providers lock -platform="$1"; }
 
-tflock darwin_amd64
-tflock darwin_arm64
 tflock linux_amd64
 tflock linux_arm64
 

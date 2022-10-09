@@ -2,7 +2,7 @@
 set -e
 
 # Exit if this is the scripts dir
-[[ scripts != ${PWD##*/} ]] || exit 0
+[[ scripts != "${PWD##*/}" ]] || exit 0
 
 echo 'FLOW: s3d-init'
 s3d-init
@@ -20,8 +20,8 @@ if [ -f main.tf ]; then
     terraform apply -input=false
   else
     log="$HOME/.s3d/logs/tf-apply-$(uuidgen | cut -c 1-8).log"
-    if ! terraform apply -input=false $@ > $log 2>&1; then
-      cat $log
+    if ! terraform apply -input=false > "$log" 2>&1; then
+      cat "$log"
       exit 1
     fi
   fi

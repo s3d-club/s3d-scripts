@@ -3,26 +3,26 @@ set -e
 
 # Clean up whitespace
 fsed() { 
-  sed -i 's/ *$//g' $1
-  sed -i 's/\t/  /g' $1
+  sed -i 's/ *$//g' "$1"
+  sed -i 's/\t/  /g' "$1"
 }
 
-fsed *.md
+fsed ./*.md
 
 if ls ./s3d-* > /dev/null 2>&1; then
   fsed s3d-*
 fi
 
 if [ -f main.go ]; then
-  fsed *.go
+  fsed ./*.go
 fi
 
 if [ -f main.tf ]; then
-  fsed *.tf
+  fsed ./*.tf
 fi
 
 # Exit if this is the scripts dir
-[[ scripts != ${PWD##*/} ]] || exit 0
+[[ scripts != "${PWD##*/}" ]] || exit 0
 
 # If a local script exists, we run it
 if [ -f ./s3d-format ]; then

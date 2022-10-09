@@ -11,8 +11,8 @@ sleep 10
 
 # Store new key and secret
 old_key=$key
-key=$(echo $new | jq -r .AccessKeyId)
-secret=$(echo $new | jq -r .SecretAccessKey)
+key=$(echo "$new" | jq -r .AccessKeyId)
+secret=$(echo "$new" | jq -r .SecretAccessKey)
 aws configure set aws_access_key_id "$key"
 aws configure set aws_secret_access_key "$secret"
 

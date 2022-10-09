@@ -30,7 +30,7 @@ fi
 export S3D_FLOW_MSG="${1^}"
 
 # Execute a local flow if one exists
-if [[ scripts != ${PWD##*/} ]]; then
+if [[ scripts != "${PWD##*/}" ]]; then
   echo 'FLOW: local flow'
   [ ! -f ./s3d-flow ] || ./s3d-flow
 fi
@@ -43,9 +43,6 @@ echo 'FLOW: test - complete'
 if [[ 0 = $(git status --porcelain  | wc -l) ]]; then
   echo -e "FLOW: Clean ${module}=$(git describe)" >&2
 else
-  v=$(s3d-flow-json | jq -r .latest)
-  v2=$(s3d-flow-json | jq -r .release)
-
   # Commit, tag and push
   s3d-flow-commit
   s3d-flow-tag

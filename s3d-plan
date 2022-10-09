@@ -2,7 +2,7 @@
 set -e
 
 # Exit if this is the scripts dir
-[[ scripts != ${PWD##*/} ]] || exit 0
+[[ scripts != "${PWD##*/}" ]] || exit 0
 
 s3d-init
 

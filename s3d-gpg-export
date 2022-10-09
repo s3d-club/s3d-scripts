@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-gpg --armor --export $(git config user.signingkey)
+gpg --armor --export "$(git config user.signingkey)"

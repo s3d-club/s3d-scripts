@@ -1,8 +1,8 @@
 #!/bin/bash
-
 set -e
 
-n=1; p="$1"; inst="$p"; [ -n "$p" ] || err="\$$n <instance-id> is required"
+n=1; p="$1"; inst="$p"; [ -n "$p" ] \
+  || err="\$$n <instance-id> is required"
 
 [ -z "$err" ] || {
   {

@@ -2,5 +2,7 @@
 set -e
 
 # Delete tags and then fetch tags from ssh
+# shellcheck disable=SC2046
 git tag -d $(git tag)
+
 git fetch ssh --tags

@@ -1,5 +1,11 @@
 #!/bin/bash
+# shellcheck disable=SC2001
 set -e
+
+# Search upwards for CHANGES.md
+until [ -f CHANGES.md ]; do
+  cd ..
+done
 
 latest=$(
   grep -E '^## \[[0-9]' < CHANGES.md \
@@ -16,6 +22,7 @@ penultimate=$(
   | sed 's/\].*//'
 )
 
+# shellcheck disable=SC2001
 is_final=$(echo "$latest" | sed 's/.*-//')
 
 if [[ "$is_final" == "$latest" ]]; then
@@ -24,11 +31,11 @@ else
   is_final=false
 fi
 
+origin_module=$(git remote get-url origin 2>&1 | sed 's/.*\///' | sed 's/\.git//')
 module=$(git remote get-url ssh | sed 's/.*\///' | sed 's/\.git//')
-module=${module:-$(git remote get-url origin | sed 's/.*\///' | sed 's/\.git//')}
+module=${module:-$origin_module}
 
-part=${PWD##*/}
-release=$(echo $latest | sed 's/-.*//')
+release="$(echo "$latest" | sed 's/-.*//')"
 json=""
 json="$json{"
 json="$json  \"is_final\": \"$is_final\","

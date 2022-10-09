@@ -2,4 +2,4 @@
 set -e
 
 log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
-terraform init >> $log 2>&1
+terraform init >> "$log" 2>&1

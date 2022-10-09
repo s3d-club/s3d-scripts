@@ -2,8 +2,7 @@
 
 echo -e "{
 	$(
-		cat ./backend.tf \
-		| grep -E '=' \
+		grep -E '=' ./backend.tf \
 		| sed -e 's/ *//g' -e 's/^/"/' -e 's/=/":/' -e 's/$/,/'
 	)
 	\"_\":null
