@@ -26,14 +26,6 @@ else
 	commit=$"$v $S3D_FLOW_MSG; $done of $items completed"
 fi
 
-# Process the block of commit message lines 
-echo "$block" | while IFS= read -r line; do
-  if [[ "$line" != "- $S3D_FLOW_MSG" ]]; then
-    str="${str}$line$'\n'"
-  fi
-done
-block="$str"
-
 # Create the full commit message
 commit="$commit"$'\n\n';
 commit="$commit$block"

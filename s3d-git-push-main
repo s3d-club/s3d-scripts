@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+git push ssh HEAD:main
+git push fork HEAD:main
+git fetch origin
