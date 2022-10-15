@@ -7,3 +7,6 @@ Recently completed and planned work is tracked here.
 ## [0.1.9](.)
 - Added `s3d-start` script
 - Added `post-flow/s3d-dev-setup` script
+
+## [0.1.10](.)
+- Fixed `s3d-flow-push`

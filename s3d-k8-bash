@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+deployment="$1"
+ns="$2"
+pod=$(
+  kubectl get pods -n "${ns}" --output json \
+  | jq -r '
+      .items[]
+      | select(.status.phase == "Running")
+      | select(.status.containerStatuses[0].name == "'"$deployment"'")
+      | .metadata.name
+  ' | head -n 1
+)
+
+if [ -n "$ns" ]; then
+  set -x
+  kubectl exec --stdin --tty -n "$ns" "$pod" -- /bin/bash
+  set +x
+else
+  set -x
+  kubectl exec --stdin --tty "$pod" -- /bin/bash
+  set +x
+fi
