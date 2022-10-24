@@ -4,3 +4,7 @@ set -e
 git push ssh HEAD:main
 git push fork HEAD:main
 git fetch origin
+git checkout HEAD~0
+git branch -d main
+git checkout -b main
+git checkout HEAD~0
