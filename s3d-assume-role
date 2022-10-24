@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Remove all AWS_ envionment variables with the exception of "AWS_PROFILE" so
-# we do not attempt to assume role from an assumed role.
-unset $(env | grep -E 'AWS_' | grep -v -E 'PROFILE' | sed 's/=.*//g')
+# Unset AWS Vars
+source s3d-unset-aws-vars
 
 role=$1
 
@@ -14,6 +13,7 @@ role=$(
   aws sts assume-role \
   --role-arn "arn:aws:iam::$account:role/$role" \
   --role-session-name "$session" \
+  --duration-seconds 43200 \
   | jq -r .Credentials
 )
 
