@@ -10,3 +10,6 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.13](.)
 - Added local branch management for `s3d-git-push-main`
+
+## [0.1.14](.)
+- Skip in `s3d-tf-lock` if `main.tf` does not exist
