@@ -13,3 +13,6 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.14](.)
 - Skip in `s3d-tf-lock` if `main.tf` does not exist
+
+## [0.1.15](.)
+- Added `profile` param for `s3d-assume-role` script
