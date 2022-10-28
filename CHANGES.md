@@ -18,3 +18,6 @@ Recently completed and planned work is tracked here.
 - Added `tflint` to `s3d-test`
 - Changed `s3d-tf-lock` to include darwin and windows
 
+
+## [0.1.19](.)
+- Added `s3d-submodule-main-delta`

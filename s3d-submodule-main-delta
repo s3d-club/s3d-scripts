@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+git submodule foreach -q 'echo "$(git log --oneline ssh/main..HEAD | wc -l) / $(git log --oneline ssh/main..HEAD | wc -l) $(pwd | sed "s/.*\///g")"'
