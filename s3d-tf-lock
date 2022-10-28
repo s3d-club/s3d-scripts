@@ -9,8 +9,15 @@ if [ -e main.tf ]; then
   set +e
   tflock() { terraform providers lock -platform="$1"; }
 
+  # We require that the Linux versions are locked
   tflock linux_amd64
   tflock linux_arm64
+
+  # We don't absolutly need the MacOS and Windows versions to be locked but it
+  # is nice to have them.
+  tflock darwin_amd64 || true
+  tflock darwin_arm64 || true
+  tflock windows_amd64 || true
 else
   echo 'INFO: "main.tf" not found; skipping'
 fi

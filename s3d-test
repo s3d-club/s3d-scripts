@@ -44,6 +44,7 @@ if [ -f main.tf ]; then
     exit 1
   fi
 
-  # Also run tfsec
+  # Also run tflint and tfsec
+  tflint .
   tfsec .
 fi

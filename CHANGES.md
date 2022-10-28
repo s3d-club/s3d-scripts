@@ -13,3 +13,8 @@ Recently completed and planned work is tracked here.
 
 ## [0.1.17](.)
 - Cleaned up `s3d-flow-json` script
+
+## [0.1.18](.)
+- Added `tflint` to `s3d-test`
+- Changed `s3d-tf-lock` to include darwin and windows
+
