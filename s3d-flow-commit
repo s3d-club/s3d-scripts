@@ -13,7 +13,7 @@ v_=$(echo "$v" | sed 's/\./\\\./')
 
 # Get the block of lines from `CHANGES.md`
 block=$(sed -e '/## \[[a-z]/,$d' < CHANGES.md | sed -n -e "/$v_/,\$p")
-block=$(echo "$block" | grep -v -E '^##')
+block=$(echo "$block" | grep -v -E '^##' | grep -v -E '^<' | grep -v -E '^\[')
 
 # Determine how much is done.
 done=$(echo "$block"  | grep -E '^-' | grep -c -v -E '^- \*\*TODO\*\*' || true)
