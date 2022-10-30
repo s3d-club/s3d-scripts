@@ -23,3 +23,6 @@ Recently completed and planned work is tracked here.
 ## [0.1.21](.)
 - Improved management of `--duration-seconds ` in `s3d-assume-role`
 - Improved parsing of commit block in `s3d-flow-commit`
+
+## [0.1.22](.)
+- Removed `npm` scripting from `s3d-init`

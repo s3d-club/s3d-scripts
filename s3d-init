@@ -60,12 +60,3 @@ if [ -f main.go ]; then
   echo 'FLOW: go mod tidy'
   go mod tidy
 fi
-
-# If a package.json exists, we run npm **UNLESS** a local `s3d-init` script
-# exists.
-if [ -z "$has_local_init" ]; then
-  if [ -f package.json ]; then
-    echo 'FLOW: npm install'
-    npm install
-  fi
-fi
