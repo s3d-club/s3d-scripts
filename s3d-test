@@ -47,4 +47,9 @@ if [ -f main.tf ]; then
   # Also run tflint and tfsec
   tflint .
   tfsec .
+
+  # Also check sort order
+  grep -E '^[a-z]' main.tf | LC_ALL=C sort -c
+  grep -E '^[a-z]' variables.tf | LC_ALL=C sort -c
+  grep -E '^[a-z]' outputs.tf | LC_ALL=C sort -c
 fi
