@@ -1,5 +1,5 @@
 # Changes
-Recently completed and planned work is tracked here.
+This file describes the project history as it relates to tagged versions.
 
 ## [0.0.0](.) to [0.1.11](.)
 - Created early versions
@@ -12,13 +12,14 @@ Recently completed and planned work is tracked here.
 - Cleaned up `s3d-flow-json` script
 - Skip in `s3d-tf-lock` if `main.tf` does not exist
 
-## [0.1.18](.) to [0.1.22](.)
+## [0.1.18](.) to [0.1.23](.)
 - Added `s3d-submodule-main-delta`
 - Added `tflint` to `s3d-test`
+- Changed `s3d-test` so it now checks sort order
 - Changed `s3d-tf-lock` to include darwin and windows
 - Improved management of `--duration-seconds ` in `s3d-assume-role`
 - Improved parsing of commit block in `s3d-flow-commit`
 - Removed `npm` scripting from `s3d-init`
 
-## [0.1.23](.)
-- Changed `s3d-test` so it now checks sort order
+## [0.1.24](.)
+- Improved logic for `S3D_FLOW_FINISHING`

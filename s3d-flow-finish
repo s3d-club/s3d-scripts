@@ -11,7 +11,7 @@ n=1; p="$1"; message="$p";  [ -n "$p" ] || err="\$$n (message) is required"
   echo -e "ABOUT: Implements a flow for development work"
 } >&2; exit 1; }
 
-export S3D_FLOW_FINISHING=true
+export S3D_FLOW_FINISHING="$(pwd)"
 
 if [ -e ./s3d-finish ]; then
   ./s3d-finish
