@@ -1,16 +1,22 @@
 #!/bin/bash
 
 role=$1
-profile=$2
-duration=$3
+duration=$2
+profile=$3
+
+echo "ROLE: $role"
+
+if [ -z "$duration" ]; then
+  duration=$(( 60 * 60 ))
+else
+  duration=$(( 60 * 60 * duration ))
+fi
+
+echo "DURATION: $(( duration / 60 / 60 )) hours"
 
 if [ -n "$profile" ]; then
   export AWS_PROFILE="$profile"
   echo -e "AWS_PROFILE=\"$profile\""
-fi
-
-if [ -z "$duration" ]; then
-  duration=$(( 60 * 60 ))
 fi
 
 # Unset AWS Vars
@@ -27,9 +33,6 @@ role=$(
   --duration-seconds "$duration" \
   | jq -r .Credentials
 )
-
-echo "ROLE:"
-echo "$role" | jq
 
 export AWS_ACCESS_KEY_ID=$(echo "$role" | jq -r .AccessKeyId)
 export AWS_SESSION_TOKEN=$(echo "$role" | jq -r .SessionToken)

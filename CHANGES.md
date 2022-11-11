@@ -23,3 +23,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.24](.)
 - Improved logic for `S3D_FLOW_FINISHING`
+
+## [0.1.25](.)
+- Improved `s3d-assume-role`
