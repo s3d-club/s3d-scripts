@@ -29,3 +29,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.26](.)
 - Added `git describe` to `s3d-submodule-main-delta`
+
+## [0.1.27](.)
+- Changed to use the `format=json` option for `api.ipify.org`
