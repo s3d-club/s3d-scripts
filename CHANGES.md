@@ -32,3 +32,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.27](.)
 - Changed to use the `format=json` option for `api.ipify.org`
+
+## [0.1.28](.)
+- Fixed typo in `README.md`

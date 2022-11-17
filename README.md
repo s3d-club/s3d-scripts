@@ -4,7 +4,7 @@ This project defines scripts for the S3D Club experience.
 ## Also READ
 Please read our [LICENSE][lice], [CONTRIBUTING][cont], [CODE-OF-CONDUCT][code],
 and [CHANGES][chge] documents before working in this project and anytime they
-are update.
+are updated.
 
 ## Overview
 The scripts here automate development tasks and are pre-installed in our ec2
