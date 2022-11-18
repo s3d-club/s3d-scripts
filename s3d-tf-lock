@@ -4,10 +4,13 @@ set -e
 if [ -e main.tf ]; then
   rm -rf .terraform*
 
-  terraform init
+  echo -e "S3D-TF-LOCK: Running \"terraform init\""
+  out="$(terraform init 2>&1)" || echo "$out"
 
-  set +e
-  tflock() { terraform providers lock -platform="$1"; }
+  tflock() {
+    echo -e "S3D-TF-LOCK: Running \"terraform providers lock -platform=$1\""
+    out="$(terraform providers lock -platform=$1 2>&1)" || echo "$out"
+  }
 
   # We require that the Linux versions are locked
   tflock linux_amd64
@@ -15,9 +18,9 @@ if [ -e main.tf ]; then
 
   # We don't absolutly need the MacOS and Windows versions to be locked but it
   # is nice to have them.
-  tflock darwin_amd64 || true
-  tflock darwin_arm64 || true
-  tflock windows_amd64 || true
+  tflock darwin_amd64
+  tflock darwin_arm64
+  tflock windows_amd64
 else
   echo 'INFO: "main.tf" not found; skipping'
 fi

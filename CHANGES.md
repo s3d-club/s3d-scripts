@@ -29,3 +29,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.28](.) to [0.1.29](.)
 - Fixed typo in `README.md`
+
+## [0.1.30](.)
+- Updated `s3d-tf-lock` script
