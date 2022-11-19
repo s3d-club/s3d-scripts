@@ -32,9 +32,9 @@ commit="$commit$block"
 
 # Issue the commit
 git add -A
-git commit -m "$commit"
+git commit --no-verify -m "$commit"
 
 # If the user is finishing amend the commit so they can edit the text
 if [[ "$S3D_FLOW_FINISHING" == "$(pwd)" ]]; then
-  git commit --amend
+  git commit --no-verify --amend
 fi

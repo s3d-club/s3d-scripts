@@ -28,10 +28,10 @@ while [[ $n != 10 ]]; do
   echo "FLOW: tagging '$v'"
   if [[ "true" == "$(s3d-flow-json | jq -r .is_final)" ]]; then
     echo "FLOW: tagging as release"
-    git tag -s -m 'release' "v$v" && git push ssh "v$v" && exit 0
+    git tag -s -m 'release' "v$v" && git push --no-verify ssh "v$v" && exit 0
   else
     echo "FLOW: tagging as pre-release"
-    git tag -s -m 'pre-release' "$v" && git push ssh $v && exit 0
+    git tag -s -m 'pre-release' "$v" && git push --no-verify ssh $v && exit 0
   fi
 
   # Delete the tag that we were not able to push

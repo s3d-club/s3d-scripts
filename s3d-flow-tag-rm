@@ -2,4 +2,4 @@
 set -e
 
 git tag -d "$1" || true
-git push ssh ":$1" || true
+git push --no-verify ssh ":$1" || true
