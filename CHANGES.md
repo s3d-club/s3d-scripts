@@ -21,7 +21,8 @@ This file describes the project history as it relates to tagged versions.
 - Improved parsing of commit block in `s3d-flow-commit`
 - Removed `npm` scripting from `s3d-init`
 
-## [0.1.24](.) to [0.1.30](.)
+## [0.1.24](.) to [0.1.31](.)
+- Added `--no-verify` for git commands in scripts
 - Added `git describe` to `s3d-submodule-main-delta`
 - Changed to use the `format=json` option for `api.ipify.org`
 - Fixed typo in `README.md`
@@ -29,5 +30,5 @@ This file describes the project history as it relates to tagged versions.
 - Improved logic for `S3D_FLOW_FINISHING`
 - Updated `s3d-tf-lock` script
 
-## [0.1.31](.)
-- Added `--no-verify` for git commands in scripts
+## [0.1.32](.)
+- Added `--quiet` to `s3d-flow-clean`

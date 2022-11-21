@@ -2,8 +2,7 @@
 set -e
 
 # First make certain that all tags have been pushed to the fork
-git tag -d s3d-reset || true
-git push --no-verify fork --tags
+git push --no-verify fork --tags --quiet
 
 # Remove anything that looks like a pre-release tag
 git tag \
