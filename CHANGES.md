@@ -30,6 +30,7 @@ This file describes the project history as it relates to tagged versions.
 - Improved `s3d-assume-role`
 - Improved logic for `S3D_FLOW_FINISHING`
 - Updated `s3d-tf-lock` script
-
-## [0.1.33](.)
 - Updated docs
+
+## [0.1.34](.)
+- Changed to use `#!/bin/bash` shebang
