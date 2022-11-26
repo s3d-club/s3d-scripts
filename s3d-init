@@ -44,7 +44,7 @@ if [ -f main.tf ]; then
     echo "FLOW: WARN tf init failed, will try again in $try_delay seconds"
     sleep $try_delay
     log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
-    terraform init
+    terraform init --upgrade
     echo 'FLOW: tf init - 2nd try complete'
   fi
 

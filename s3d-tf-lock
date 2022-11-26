@@ -5,7 +5,7 @@ if [ -e main.tf ]; then
   rm -rf .terraform*
 
   echo -e "S3D-TF-LOCK: Running \"terraform init\""
-  out="$(terraform init 2>&1)" || echo "$out"
+  out="$(terraform init --upgrade 2>&1)" || echo "$out"
 
   tflock() {
     echo -e "S3D-TF-LOCK: Running \"terraform providers lock -platform=$1\""
