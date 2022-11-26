@@ -34,3 +34,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.34](.)
 - Changed to use `#!/bin/bash` shebang
+
+## [0.1.35](.)
+- Added `git fetch https` to `s3d-git-push-main`
