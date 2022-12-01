@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-
-v=$(git describe)
-
-cd ../04-ec2
-sed -i "s/.* # from dev-setup.*$/  default = \"$v\" # from dev-setup/" variables.tf
-s3d-flow

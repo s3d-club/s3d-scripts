@@ -37,5 +37,6 @@ This file describes the project history as it relates to tagged versions.
 - Added `git fetch https` to `s3d-git-push-main`
 - Changed to use `#!/bin/bash` shebang
 
-## [0.1.37](.)
+## [0.1.37](.) to [0.1.38](.)
+- Removed `post-flow` dir
 - Removed `s3d-flow-reset` from `s3d-flow-finish`
