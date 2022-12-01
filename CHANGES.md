@@ -32,9 +32,10 @@ This file describes the project history as it relates to tagged versions.
 - Updated `s3d-tf-lock` script
 - Updated docs
 
-## [0.1.34](.) to [0.1.35](.)
+## [0.1.34](.) to [0.1.36](.)
+- Added `--upgrade` to `terraform init`
 - Added `git fetch https` to `s3d-git-push-main`
 - Changed to use `#!/bin/bash` shebang
 
-## [0.1.36](.)
-- Added `--upgrade` to `terraform init`
+## [0.1.37](.)
+- Removed `s3d-flow-reset` from `s3d-flow-finish`

@@ -30,7 +30,6 @@ else
   v_=$(echo "$v" | sed 's/\./\\\./')
   v2_=$(echo "$v2" | sed 's/\./\\\./')
   sed -i -e 's/\['"$v_"'\]/\['"$v2_"'\]/' CHANGES.md
-  s3d-flow-reset
   . s3d-flow "$message"
 fi
 
