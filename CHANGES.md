@@ -40,3 +40,7 @@ This file describes the project history as it relates to tagged versions.
 ## [0.1.37](.) to [0.1.38](.)
 - Removed `post-flow` dir
 - Removed `s3d-flow-reset` from `s3d-flow-finish`
+
+## [0.1.39](.)
+- Changed to use ` --tags` as an option for `git describe`
+- Fixed a bug in `s3d-git-list-version-tags` where the listing was incorrect

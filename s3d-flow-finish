@@ -25,7 +25,7 @@ fi
 v=$(s3d-flow-json | jq -r .latest)
 v2=$(s3d-flow-json | jq -r .release)
 if [[ "$v" == "$v2" ]]; then
-  echo "FLOW: ALREADY FINISHED $S3D_MODULE?ref=$(git describe)"
+  echo "FLOW: ALREADY FINISHED $S3D_MODULE?ref=$(git describe --tags)"
 else
   v_=$(echo "$v" | sed 's/\./\\\./')
   v2_=$(echo "$v2" | sed 's/\./\\\./')
@@ -33,4 +33,4 @@ else
   . s3d-flow "$message"
 fi
 
-echo "FLOW: FINISHED $S3D_MODULE?ref=$(git describe)"
+echo "FLOW: FINISHED $S3D_MODULE?ref=$(git describe --tags)"
