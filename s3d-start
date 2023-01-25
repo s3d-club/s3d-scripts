@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+# If a local script exists, we run it
+if [ -f ./s3d-start ]; then
+  ./s3d-start
+  exit 0
+fi

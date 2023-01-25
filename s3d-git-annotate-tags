@@ -1,5 +1,0 @@
-#!/bin/bash
-
-s3d-git-list-version-tags \
-| sed 's/^/s3d-git-annotate-tag /' \
-| sh

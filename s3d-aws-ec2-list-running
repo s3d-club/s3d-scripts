@@ -6,7 +6,7 @@ set -e
 ri=$(
   aws ec2 describe-instances | jq -r '
   .Reservations[].Instances[]
-  | select(.State.Name == "running") 
+  | select(.State.Name == "running")
   | .InstanceId
   '
 )

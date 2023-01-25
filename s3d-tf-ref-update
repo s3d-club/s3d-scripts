@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+m=$(s3d-flow-json | jq -r .module)
+
+v="$1"
+
+[ -n "$v" ] || v="$(git describe --tags)"
+
+echo -e "Updating \"$m?ref=$v\""
+
+cd ..
+
+sed -i "s/\/$m?ref=.*\"/\/$m?ref=$v\"/" $(
+	find . -name \*.tf -not -path '*/.terraform/*'
+)

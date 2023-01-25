@@ -1,4 +1,0 @@
-#!/bin/bash
-
-git tag -f "$1" "v$1"
-git push -f ssh "$1"

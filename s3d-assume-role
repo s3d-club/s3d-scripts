@@ -1,0 +1,40 @@
+#!/bin/bash
+
+role=$1
+duration=$2
+profile=$3
+
+echo "ROLE: $role"
+
+if [ -z "$duration" ]; then
+  duration=$(( 60 * 60 ))
+else
+  duration=$(( 60 * 60 * duration ))
+fi
+
+echo "DURATION: $(( duration / 60 / 60 )) hours"
+
+if [ -n "$profile" ]; then
+  export AWS_PROFILE="$profile"
+  echo -e "AWS_PROFILE=\"$profile\""
+fi
+
+# Unset AWS Vars
+source s3d-unset-aws-vars
+
+session="$(whoami)"
+id="$(aws sts get-caller-identity)"
+account="$(echo "$id" | jq -r .Account)"
+
+role=$(
+  aws sts assume-role \
+  --role-arn "arn:aws:iam::$account:role/$role" \
+  --role-session-name "$session" \
+  --duration-seconds "$duration" \
+  | jq -r .Credentials
+)
+
+export AWS_ACCESS_KEY_ID=$(echo "$role" | jq -r .AccessKeyId)
+export AWS_SESSION_TOKEN=$(echo "$role" | jq -r .SessionToken)
+export AWS_SECRET_ACCESS_KEY=$(echo "$role" | jq -r .SecretAccessKey)
+export AWS_SESSION_TOKEN=$(echo "$role" | jq -r .SessionToken)

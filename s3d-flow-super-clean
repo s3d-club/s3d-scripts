@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+s3d-git-add-fork
+
+# shellcheck disable=SC2046
+git tag -d $(git tag)
+
+git fetch fork --tags
+git tag \
+| sed 's/^/git push --no-verify fork :/' \
+| sh
+
+# shellcheck disable=SC2046
+git tag -d $(git tag)
+
+git fetch ssh --tags
+git tag | grep -v v | sed 's/^/s3d-tag-rm /' | sh
+git push fork --tags
+
+s3d-git-list-version-tags

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo -e "{
+	$(
+		grep -E '=' ./backend.tf \
+		| sed -e 's/ *//g' -e 's/^/"/' -e 's/=/":/' -e 's/$/,/'
+	)
+	\"_\":null
+}" 

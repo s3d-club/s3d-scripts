@@ -1,8 +1,0 @@
-#!/bin/bash
-
-set -e
-
-git tag \
-| grep -E '\-[0-9]$'  \
-| sed 's/^/git push ssh :/' \
-| sh

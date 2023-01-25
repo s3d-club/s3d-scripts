@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+# Determine the module
+module=$(s3d-flow-json | jq -r .module)
+
+# Execute a local post flow if one exists
+if [ -e ./s3d-post-flow ]; then
+  echo "FLOW: starting local postflow '$module'" 
+  ./s3d-post-flow
+else
+  echo "FLOW: no local postflow for '$module'" 
+fi
+
+# Execute a module post flow if one exists
+if [ -f "../scripts/post-flow/$module" ]; then
+  echo "FLOW: starting postflow '$module'" 
+  "../scripts/post-flow/$module" "$1"
+else
+  echo "FLOW: no postflow for '$module'" 
+fi

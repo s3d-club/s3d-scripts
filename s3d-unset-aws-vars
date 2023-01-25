@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Remove all AWS_ envionment variables with the exception of "AWS_PROFILE"
+unset $(env | grep -E 'AWS_' | grep -v -E 'PROFILE' | sed 's/=.*//g')

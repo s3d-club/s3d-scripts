@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+git submodule foreach -q 'echo -e "[{
+  \"path\": \"$(basename $(pwd))\",
+  \"project\": \"$(git remote get-url origin | sed -e "s/.*\///g" -e "s/\.git$//" -e "s/-/_/g")\",
+  \"tags\": \"$(git tag | wc -l)\",
+  \"commits\": \"$(git log --oneline | wc -l)\",
+  \"ahead_of_main\": \"$(git log --oneline ssh/main..HEAD | wc -l)\",
+  \"behind_of_main\": \"$(git log --oneline HEAD..ssh/main | wc -l)\",
+  \"describe\": \"$(git describe --tags)\"
+}]"'

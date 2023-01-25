@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+# Exit if this is the scripts dir
+[[ scripts != "${PWD##*/}" ]] || exit 0
+
+echo 'FLOW: s3d-init'
+s3d-init
+echo 'FLOW: s3d-init - complete'
+
+echo 'FLOW: s3d-test'
+if [ -f ./s3d-test ]; then
+  ./s3d-test
+fi
+echo 'FLOW: s3d-test - complete'
+
+if [ -f main.tf ]; then
+  echo "FLOW: terraform apply $1"
+  if [[ "$1" != '-auto-approve' ]]; then
+    terraform apply -input=false
+  else
+    log="$HOME/.s3d/logs/tf-apply-$(uuidgen | cut -c 1-8).log"
+    if ! terraform apply -input=false > "$log" 2>&1; then
+      cat "$log"
+      exit 1
+    fi
+  fi
+fi
+
+if [ -f ./s3d-apply ]; then
+  ./s3d-apply "$1"
+fi

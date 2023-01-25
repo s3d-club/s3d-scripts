@@ -1,0 +1,62 @@
+#!/bin/bash
+set -e
+
+echo 'FLOW: init'
+
+# Exit if this is the scripts dir
+if [[ scripts == "${PWD##*/}" ]]; then
+  echo 'FLOW: no flow in scripts dir'
+  exit 0
+fi
+
+# Determine module
+module=$(s3d-flow-json | jq -r .module)
+
+# If a local script exists, then run ONLY it
+if [ -f "$HOME/.s3d/$module/s3d-init" ]; then
+  echo 'FLOW: local s3d-init'
+  "$HOME/.s3d/$module/s3d-init"
+  exit 0
+fi
+
+# If a project script exists, then run ONLY it
+if [ -f ./s3d-init ]; then
+  echo 'FLOW: project s3d-init'
+  ./s3d-init
+  exit 0
+fi
+
+echo 'FLOW: format'
+s3d-format
+
+# If main.tf exits, we also init by running terrafom validate
+if [ -f main.tf ]; then
+  echo 'FLOW: tf get -update'
+  log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+  terraform get -update >> $log 2>&1 
+
+  echo 'FLOW: tf init'
+  log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+  if s3d-terraform-init; then
+    echo 'FLOW: tf init - complete'
+  else
+    try_delay=10
+    echo "FLOW: WARN tf init failed, will try again in $try_delay seconds"
+    sleep $try_delay
+    log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+    terraform init --upgrade
+    echo 'FLOW: tf init - 2nd try complete'
+  fi
+
+  if [ -n "$S3D_TF_LOCK" ]; then
+    echo 'FLOW: tf lock update'
+    log="$HOME/.s3d/logs/$(uuidgen | cut -c 1-8).log"
+    s3d-tf-lock >> "$log" 2>&1
+  fi
+fi
+
+# If main.go, we run go tidy
+if [ -f main.go ]; then
+  echo 'FLOW: go mod tidy'
+  go mod tidy
+fi

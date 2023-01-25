@@ -1,0 +1,52 @@
+#!/bin/bash
+set -e
+
+if [ -n "$2" ]; then
+  echo "FLOW: in '$(pwd)' changing to '$2'"
+  cd "../$2"
+fi
+
+# determine the module
+module=$(s3d-flow-json | jq -r .module)
+export S3D_MODULE=$module
+
+echo -e $'\n'
+echo -e "************************************************************"
+echo -e "* FLOW: $(pwd)"
+echo -e "* $module"
+echo -e "************************************************************"
+echo -e $'\n'
+
+# If we are not in S3D_FLOW_FINISHING error when we don't have a pre-release
+if [ -z "$S3D_FLOW_FINISHING" ]; then
+  flow_status="$(s3d-flow-json | jq -r .is_final)"
+    if [[ true == "$flow_status" ]]; then
+    echo 'ERROR: flow not started' 2>&1; exit 1
+  fi
+fi
+
+# Create the flow message
+export S3D_FLOW_MSG="${1^}"
+
+# Execute a local flow if one exists
+if [[ scripts != "${PWD##*/}" ]]; then
+  echo 'FLOW: local flow'
+  [ ! -f ./s3d-flow ] || ./s3d-flow
+fi
+
+# We need to test first
+s3d-test
+echo 'FLOW: test - complete'
+
+# Commit, tag and push
+s3d-flow-commit
+s3d-flow-tag
+
+# Checkout a "Detatched" head
+git checkout -q HEAD~0
+
+# Update "ref=" in other modules
+s3d-tf-ref-update
+
+# Run the post flow
+s3d-flow-post-flow
