@@ -4,8 +4,12 @@ set -e
 # First make certain that all tags have been pushed to the fork
 git push --no-verify fork --tags --quiet
 
+# Refresh now so we don't clean tags that are not in the origin
+s3d-tag-refetch
+
 # Remove anything that looks like a pre-release tag
 git tag \
 | grep -E '^[0-9]+\.[0-9]+\.[0-9]+-.*$' \
-| sed 's/^/s3d-flow-tag-rm /' \
+| grep -v -F "$(git describe --tags)" \
+| sed 's/^/s3d-tag-rm /' \
 | sh

@@ -20,8 +20,7 @@ echo -e $'\n'
 # If we are not in S3D_FLOW_FINISHING error when we don't have a pre-release
 if [ -z "$S3D_FLOW_FINISHING" ]; then
   flow_status="$(s3d-flow-json | jq -r .is_final)"
-  echo "FLOW: preparing '$flow_status' flow"
-  if [[ true == "$flow_status" ]]; then
+    if [[ true == "$flow_status" ]]; then
     echo 'ERROR: flow not started' 2>&1; exit 1
   fi
 fi
@@ -39,20 +38,15 @@ fi
 s3d-test
 echo 'FLOW: test - complete'
 
-# If the status is clean we are done
-if [[ 0 = $(git status --porcelain  | wc -l) ]]; then
-  echo -e "FLOW: Clean ${module}=$(git describe)" >&2
-else
-  # Commit, tag and push
-  s3d-flow-commit
-  s3d-flow-tag
+# Commit, tag and push
+s3d-flow-commit
+s3d-flow-tag
 
-  # Checkout a "Detatched" head
-  git checkout -q HEAD~0
-fi
+# Checkout a "Detatched" head
+git checkout -q HEAD~0
 
-# Push the flow to update "ref=" in other modules
-s3d-flow-push
+# Update "ref=" in other modules
+s3d-tf-ref-update
 
 # Run the post flow
 s3d-flow-post-flow

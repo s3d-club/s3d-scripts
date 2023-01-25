@@ -2,6 +2,8 @@
 # shellcheck disable=SC2001
 set -e
 
+S3D_PRE_RELEASE_START="${S3D_PRE_RELEASE_START:-1000000}"
+
 # Loop until we are able to tag and push
 m=$(s3d-flow-json | jq -r .module)
 v=$(s3d-flow-json | jq -r .latest)
@@ -48,30 +50,18 @@ while [[ $n != 10 ]]; do
   echo "FLOW: incrementing pre '$pre'"
   if ! pre=$(( pre + 1 )); then
     echo "FLOW: inc failed"
-     pre=1000
+     pre="$S3D_PRE_RELEASE_START"
   fi
 
-  # Make sure we are at least 1000
-  if [[ $pre -lt 1000 ]]; then
-    pre=1000
+  # Make sure the number is high enough to avoid collisions with pipelines
+  if [[ $pre -lt "$S3D_PRE_RELEASE_START" ]]; then
+    pre="$S3D_PRE_RELEASE_START"
   fi
-
-  # Find or create a group code for the pre-release number
-  if [ -z "$S3D_GROUP" ]; then
-    if [ -f '../.dev-group' ]; then
-      S3D_GROUP="$(cat ../.dev-group)"
-    else
-      S3D_GROUP="$(whoami)"
-    fi
-  fi
-
-  # Add the group code
-  pre="$S3D_GROUP-$pre"
 
   # Use sed to update CHANGES.md for an incremented pre-release number
   v2="$(echo "$v" | sed 's/-.*//')-$pre"
   v2_=$(echo "$v2" | sed 's/\./\\\./')
-  sed -i -e 's/\['"$v_"'\]/\['"$v2_"'\]/' CHANGES.md
+  sed -i -e 's/ '"$v_"'/ '"$v2_"'/' CHANGES.md
   { git reset HEAD^ && s3d-flow-commit; } > /dev/null
   v=$v2
   v_=$v2_

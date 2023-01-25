@@ -15,7 +15,7 @@ git tag \
 git tag -d $(git tag)
 
 git fetch ssh --tags
-git tag | grep -v v | sed 's/^/s3d-flow-tag-rm /' | sh
+git tag | grep -v v | sed 's/^/s3d-tag-rm /' | sh
 git push fork --tags
 
 s3d-git-list-version-tags

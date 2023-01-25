@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+git push --no-verify fork HEAD:next
+git push --no-verify ssh HEAD:next
+git fetch origin
+git fetch https || true
+git checkout HEAD~0
+git branch -d next
+git checkout -b next
+git checkout HEAD~0

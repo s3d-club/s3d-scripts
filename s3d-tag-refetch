@@ -5,4 +5,4 @@ set -e
 # shellcheck disable=SC2046
 git tag -d $(git tag)
 
-git fetch ssh --tags
+git fetch origin --tags --no-recurse-submodules

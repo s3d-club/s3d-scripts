@@ -3,13 +3,8 @@
 # shellcheck disable=SC2001
 set -e
 
-n=1; p="$1"; message="$p";  [ -n "$p" ] || err="\$$n (message) is required"
-
-[ -z "$err" ] || { {
-  echo -e "ERR..: $err"
-  echo -e "USE..: $(echo "$0" | sed 's/.*\///') <message>"
-  echo -e "ABOUT: Implements a flow for development work"
-} >&2; exit 1; }
+message="$1"
+message="${message:-release}"
 
 export S3D_FLOW_FINISHING="$(pwd)"
 
@@ -29,7 +24,7 @@ if [[ "$v" == "$v2" ]]; then
 else
   v_=$(echo "$v" | sed 's/\./\\\./')
   v2_=$(echo "$v2" | sed 's/\./\\\./')
-  sed -i -e 's/\['"$v_"'\]/\['"$v2_"'\]/' CHANGES.md
+  sed -i -e 's/ '"$v_"'/ '"$v2_"'/' CHANGES.md
   . s3d-flow "$message"
 fi
 

@@ -8,15 +8,14 @@ if [[ $latest != $(echo -n "$latest" | sed 's/-.*//') ]]; then
   exit 0
 fi
 
-v=$latest
-v_minor=$(echo "$v" | sed 's/.*\.//')
-v_minor=$(( v_minor + 1 ))
-v=$(echo "$v" | sed 's/\.[^\.]*$//')
-v="## [$v.$v_minor-1000](.)"
+v="$latest"
+v_major=$(echo "$v" | tr '.' '\n' | head -n 1)
+v_minor=$(echo "$v" | tr '.' '\n' | head -n 2 | tail -n 1)
+v_minor=$(( v_minor + 1))
 
 item="${1:-**TODO** Planned item}"
 {
   echo ""
-  echo "$v"
+  echo "## $v_major.$v_minor.0-1"
   echo "- $item"
 } >> CHANGES.md
